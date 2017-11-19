@@ -1,3 +1,5 @@
 # National Library Hackathon 2017
 
-Odelya Holiday, Michael Yungerman, Harel Cain, Hagai Weinfeld and Daniel Hadar.
+Michael Yungerman, Harel Cain, Hagai Weinfeld and Daniel Hadar.
+
+NIL API: http://iiif.nli.org.il/
