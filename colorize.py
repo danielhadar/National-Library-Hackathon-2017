@@ -23,10 +23,10 @@ def colorize_image(fn):
 
     small_fn = fn.replace(ext, '.small' + ext)
     small_colored_fn = fn.replace(ext, '.small.color' + ext)
-    out_fn = fn.replace(fn, '.color' + ext)
+    out_fn = fn.replace(ext, '.color' + ext)
 
     scipy.misc.imsave(small_fn, input_image_downsampled)
-    os.system('th colorize.lua %s %s' % (small_fn, small_colored_fn))
+    os.system('th colorize.lua %s %s colornet.t7' % (small_fn, small_colored_fn))
 
     small_colored = skimage.io.imread(small_colored_fn)
     small_chroma = skimage.color.rgb2yuv(small_colored)
