@@ -14,7 +14,7 @@ MIN_AXIS_SIZE = 360
 def colorize_image(fn):
     input_image = scipy.misc.imread(fn, mode='RGB') / 255.
 
-    small_size = np.array(input_image.shape[:2]) * (MIN_AXIS_SIZE / min(input_image.shape[:2]))
+    small_size = np.array(input_image.shape[:2]) * (float(MIN_AXIS_SIZE) / min(input_image.shape[:2]))
     small_size = np.round(small_size).astype(int)
     input_image_downsampled = skimage.transform.resize(input_image, small_size, preserve_range=True,
                                                        mode='reflect')

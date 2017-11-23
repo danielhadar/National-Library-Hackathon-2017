@@ -135,3 +135,5 @@ venv.bak/
 .gitignore
 .idea/
 colornet.t7
+weights
+images
