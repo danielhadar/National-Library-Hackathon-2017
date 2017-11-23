@@ -1,0 +1,49 @@
+.loading {
+    background-size: 32px 32px;
+    background: #ffffff url("/public/img/loading.gif") no-repeat center top;
+}
+
+.search {
+    margin: 0 auto;
+    width: 800px;
+}
+
+.user-avatar {
+    float: left;
+    margin-right: 12px;
+    width: 40px;
+    border-radius: 40px;
+}
+
+#results {
+    margin-top: 40px;
+    min-height: 40px;
+}
+
+#search-results-header{
+    display: none;
+}
+
+.load-prev-page, .load-more-results{
+    display: none;
+    line-height: 20px;
+    height: 30px;
+    font-size: 15px;
+    background: #fff;
+    color: #000;
+    margin-top: 10px;
+}
+
+.pic-container {
+    float: left;
+    max-width: 228px;
+    max-height: 228px;
+    height: 228px;
+    width: 228px;
+    margin: 10px;
+}
+
+#preview {
+    margin-top: 10px;
+    width: 556px
+}
