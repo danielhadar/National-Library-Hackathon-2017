@@ -12,7 +12,6 @@ import scipy.sparse.linalg as splinalg
 
 import skimage.color
 
-#import cv2
 
 def _wls_filter(input_image, lambda_=1.0, alpha=1.2, guide_image=None):
     if guide_image is None:
@@ -47,6 +46,7 @@ def _wls_filter(input_image, lambda_=1.0, alpha=1.2, guide_image=None):
     solution = splinalg.spsolve(F, input_image.flatten('F')).reshape((rows, columns), order='F')
     return solution
 
+
 def wls(image):
     assert(image.ndim == 3)
     guide_image = np.log(skimage.color.rgb2gray(image) + 1e-8)
@@ -55,7 +55,6 @@ def wls(image):
         print(c)
         out_image[:,:,c] = _wls_filter(image[:,:,c], lambda_=0.05,  guide_image=guide_image)
     return out_image
-
 
 
 def histogram_equalization(img):
