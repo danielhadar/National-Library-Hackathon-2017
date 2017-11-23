@@ -1,4 +1,4 @@
-import sys
+import os, sys
 from skimage import exposure
 from skimage import color
 
@@ -11,6 +11,8 @@ import scipy.sparse as sparse
 import scipy.sparse.linalg as splinalg
 
 import skimage.color
+
+#import cv2
 
 def _wls_filter(input_image, lambda_=1.0, alpha=1.2, guide_image=None):
     if guide_image is None:
@@ -77,18 +79,18 @@ def adjust_saturation(img, saturation_factor):
 	hsv[:, :, 1] = np.clip(hsv[:,:,1] * saturation_factor, 0, 1)
 	return color.hsv2rgb(hsv)
 
+def improve_image(fn):
+    image = scipy.misc.imread(fn, mode='RGB')
+    improved_image =  adjust_saturation(histogram_equalization(image), saturation_factor=1.15).astype(np.float32)
+    #smoothed_image = cv2.ximgproc.guidedFilter(improved_image, improved_image, radius=6, eps=0.1*0.1)
+    ext = os.path.splitext(fn)[1]
+    out_fn = fn.replace(ext, '.improved' + ext)
+
+    scipy.misc.imsave(out_fn, improved_image)
 
 # used for eyeball testing
 if __name__ == '__main__':
-	filename = sys.argv[1]
-	input_image = scipy.misc.imread(filename, mode='RGB') / 255.
+    for fn in sys.argv[1:]:
+        improve_image(fn)
+        print('Improved {}'.format(fn))
 
-	output_image = histogram_equalization(input_image)
-	#output_image = adjust_saturation(input_image, 1)
-
-	fig = plt.figure()
-	fig.add_subplot(1, 2, 1)
-	imgplot = plt.imshow(input_image)
-	fig.add_subplot(1, 2, 2)
-	imgplot = plt.imshow(output_image)
-	plt.show()
