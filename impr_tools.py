@@ -3,8 +3,7 @@ from skimage import exposure
 from skimage import color
 
 import scipy.misc
-
-import matplotlib.pyplot as plt
+from math import exp
 
 import numpy as np
 import scipy.sparse as sparse
@@ -73,10 +72,20 @@ def logarithmic_correction(img, gain=1, inverse=False):
 	return exposure.adjust_log(img, gain=gain, inv=inverse)
 
 
+def sigmoid(x):
+    if (type(x) != 'float'): return x
+    exp(2 * x - 10) / (1 + exp(2 * x - 10))
+
 def adjust_saturation(img, saturation_factor):
-	hsv = color.rgb2hsv(img)
-	hsv[:, :, 1] = np.clip(hsv[:,:,1] * saturation_factor, 0, 1)
-	return color.hsv2rgb(hsv)
+    hsv = color.rgb2hsv(img)
+    # hsv[:, :, 1] = np.clip(hsv[:, : ,1] * saturation_factor, 0, 1)
+
+    dim_x, dim_y = hsv[:, :, 1].shape
+    for x in range(dim_x):
+        for y in range(dim_y):
+            hsv[:, :, 1][x][y] = sigmoid(hsv[:, :, 1][x][y])
+
+    return color.hsv2rgb(hsv)
 
 def improve_image(fn):
     image = scipy.misc.imread(fn, mode='RGB')

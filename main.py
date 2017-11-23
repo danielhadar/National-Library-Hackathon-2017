@@ -48,7 +48,8 @@ def process_image(image_url, is_url, should_colorize, should_equalize_hist, shou
 		print("!-- Skipping Adjust Saturation --!\n")
 
 	# Done
-	scipy.misc.imsave('./var/www/html/final_image.png', img)
+	print("#-- Exporting... --#\n")
+	scipy.misc.imsave('/var/www/html/final_image.png', img)
 	print('----> Done! <----\n')
 
 
