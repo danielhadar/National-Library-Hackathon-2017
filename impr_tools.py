@@ -3,23 +3,30 @@ from skimage import exposure
 from skimage import color
 
 import scipy.misc
+import numpy.clip
 
 import matplotlib.pyplot as plt
 
 
 def histogram_equalization(img):
-	img_eq = exposure.equalize_hist(img)
-	return img_eq
+	return exposure.equalize_hist(img)
 
 
 def adaptive_histogram_equalization(img):
-	img_adapteq = exposure.equalize_adapthist(img, clip_limit=0.03)
-	return img_adapteq
+	return exposure.equalize_adapthist(img, clip_limit=0.03)
+
+
+def gamma_correction(img, gamma=1, gain=1):
+	return exposure.adjust_gamma(img, gamma=gamma, gain=gain)
+
+
+def logarithmic_correction(img, gain=1, inverse=False):
+	return exposure.adjust_log(img, gain=gain, inv=inverse)
 
 
 def adjust_saturation(img, saturation_factor):
 	hsv = color.rgb2hsv(img)
-	hsv[:,:,1] *= saturation_factor
+	hsv[:, :, 1] = numpy.clip(hsv[:,:,1] * saturation_factor, 0, 1)
 	return color.hsv2rgb(hsv)
 
 
