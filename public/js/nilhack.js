@@ -10,7 +10,6 @@ function loadImageTemplate() {
 
 function doSearch(query) {
     $("#images").html("");
-    $("#results").addClass("loading");
     $("#search-results-header").hide();
     $(".load-prev-page").hide();
     $(".load-more-results").hide();
@@ -23,6 +22,7 @@ function doSearch(query) {
         bulkSize: 9
     };
     var url = "http://primo.nli.org.il/PrimoWebServices/xservice/search/brief?institution=NNL&loc=local,scope:(NNL)&query=lsr08,exact,%D7%94%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%94+%D7%94%D7%9C%D7%90%D7%95%D7%9E%D7%99%D7%AA+%D7%90%D7%A8%D7%9B%D7%99%D7%95%D7%9F+%D7%93%D7%9F+%D7%94%D7%93%D7%A0%D7%99";
+    $("#loader").addClass("loading");
     $.ajax({
         type: "GET",
         url: url,
@@ -30,6 +30,7 @@ function doSearch(query) {
         jsonp: "callback",
         dataType: 'jsonp',
         success: function (response) {
+            $("#loader").removeClass("loading");
             var totalHits = response.SEGMENTS.JAGROOT.RESULT.DOCSET['@TOTALHITS']
             var renderedResults = "";
 
@@ -63,7 +64,7 @@ function doSearch(query) {
                     var urlToFetch = e.target.src;
                     var backednURL = "http://34.239.198.2:5000/photo";
                     console.log(urlToFetch);
-
+                    $("#loader").addClass("loading");
                     $.ajax({
                         type: "GET",
                         url: backednURL,
@@ -74,25 +75,29 @@ function doSearch(query) {
                         dataType: 'jsonp',
                         success: function (response) {
                             console.log(response);
-                            let preview = $("#preview").html('');
+                            let preview = $(".preview").html('');
                             // let parent = $(e.target).parent();
                             var urlAfter = response.processed_image;
                             //"http://iiif.nli.org.il/IIIFv21/FL45931741/full/576,/0/default.jpg";
                             preview.append("<img src='"+urlToFetch+"'>");
                             preview.append("<img src='"+urlAfter+"'>");
+                            // $.featherlight(preview,{});
+                            // $.fancybox.defaults.modal = true;
+                            // $.fancybox.open(preview);
+                            lity(preview);
+                            $(document).on('lity:close', function(event, instance) {
+                                var previewParent = $('.preview').parent()
+                                $('.preview').remove();
 
-                            $.fancybox.defaults.modal = true;
-                            $.fancybox.open(preview);
+                                $(".search").append("<div class='preview'></div>");
+                            });
+
+
                             preview.twentytwenty();
-                            // setTimeout(function(){
-                            //     let preview = $("#preview");
-                            //     preview.twentytwenty();
-                            // }, 1000);
+                            $("#loader").removeClass("loading");
                         }
                     });
                 });
-
-
 
                 $("#page-number").html(lastQueryPage);
                 $("#search-results-header").show();

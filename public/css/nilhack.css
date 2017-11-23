@@ -43,7 +43,16 @@
     margin: 10px;
 }
 
-#preview {
+.preview {
     margin-top: 10px;
     width: 556px
+}
+
+.pic {
+    max-height: 228px;
+    max-width: 228px;
+}
+
+#loader{
+    height: 35px;
 }

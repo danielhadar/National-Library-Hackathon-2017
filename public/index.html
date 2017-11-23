@@ -1,7 +1,7 @@
 <html>
 <head>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
-    <link href='css/klarna-ui-css-components.css' rel='stylesheet' type='text/css'>
+    <link href='css/hack-ui-css-components.css' rel='stylesheet' type='text/css'>
     <link href='css/nilhack.css' rel='stylesheet' type='text/css'>
 
     <link href="css/foundation.css" rel="stylesheet" type="text/css" />
@@ -14,10 +14,10 @@
     <script src="js/jquery.event.move.js"></script>
     <script src="js/jquery.twentytwenty.js"></script>
 
-    <link  href="css/jquery.fancybox.css" rel="stylesheet">
-    <script src="js/jquery.fancybox.js"></script>
+    <link href="css/lity.min.css" rel="stylesheet">
+    <script src="js/lity.min.js"></script>
 
-    <title>Exercise</title>
+    <title>NLIHACK Lightricks</title>
 </head>
 <body>
 <div class="search">
@@ -26,27 +26,18 @@
         <input id='ImagesSearch' class="cui__input__input" placeholder="Type your search query" type="search"
                name="q" autocomplete="off"/>
     </div>
-
+    <div id="loader"></div>
     <div id="results">
-        <input class='load-prev-page' type="button" value="← Back">
-        <input class='load-more-results' type="button" value="I Want More Images →">
-
         <div class="cui__selector--direct title">
-            <h2 class="cui__selector--direct__title" id="search-results-header">
-                Search results, page #<span id="page-number"></span>
-            </h2>
             <div id="images"></div>
         </div>
     </div>
 
-    <div id="preview"></div>
-
-    <input class='load-prev-page' type="button" value="← Back">
-    <input class='load-more-results' type="button" value="I Want More Images →">
+    <div class="preview"></div>
 </div>
 
 <script id="template" type="x-tmpl-mustache">
-<div class="cui__selector--direct__item pic-container">
+<div class="pic-container">
     <img class="pic" src="{{picture}}" />
 </div>
 </script>
