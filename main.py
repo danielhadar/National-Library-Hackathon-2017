@@ -64,5 +64,5 @@ if __name__ == '__main__':
 		print("!-- Skipping Adjust Saturation --!\n")
 
 	# Done
-	scipy.misc.imsave('./final_image.png', img)
+	scipy.misc.imsave('/home/odelya/public_html‏/final_image.png', img)
 	print('----> Done! <----\n')
