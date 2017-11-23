@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_jsonpify import jsonpify
+import time;
 
 import socket
 
@@ -19,12 +20,14 @@ app = Flask(__name__)
 def hello_world():
     image_url = request.args.get('image_url', 'no image was sent')
 #    print image_url
-    call_code(image_url)
+    ts = str(time.time())
+    image_name = "final_image"+ts+".png"
+    call_code(image_url, image_name)
 #    print "finished"
-    return jsonpify(processed_image="http://34.239.198.2/final_image.png")
+    return jsonpify(processed_image="http://34.239.198.2/"+image_name)
 
-def call_code(image_url):
-    process_image(image_url, True, True, False, False)
+def call_code(image_url, image_name):
+    process_image(image_url, image_name, True, True, False, False)
 
 if __name__ == '__main__':
     app.run(host=IP, port=5000, debug=False)

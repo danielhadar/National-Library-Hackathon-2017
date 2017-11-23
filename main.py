@@ -19,7 +19,7 @@ def boolean_from_char(char):
 	return True
 
 
-def process_image(image_url, is_url, should_colorize, should_equalize_hist, should_adjust_saturation):
+def process_image(image_url, image_name, is_url, should_colorize, should_equalize_hist, should_adjust_saturation):
 	# Download image
 	if is_url:
 		img = image_from_url(image_url)
@@ -49,7 +49,7 @@ def process_image(image_url, is_url, should_colorize, should_equalize_hist, shou
 
 	# Done
 	print("#-- Exporting... --#\n")
-	scipy.misc.imsave('/var/www/html/final_image.png', img)
+	scipy.misc.imsave('/var/www/html/'+image_name, img)
 	print('----> Done! <----\n')
 
 
