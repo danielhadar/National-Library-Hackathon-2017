@@ -40,7 +40,7 @@ if __name__ == '__main__':
 	img = image_from_url(image_url)
 
 	# Colorize
-	should_colorize = True if len(sys.argv) <= 2 else sys.argv[2]
+	should_colorize = True if len(sys.argv) <= 2 else boolean_from_char(sys.argv[2])
 	if should_colorize:
 		print("#-- Running Colorizing --#\n")
 		img = colorize.colorize_image(img)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 		print("!-- Skipping Colorizing --!\n")
 
 	# Histogram Equalization
-	should_equalize_hist = True if len(sys.argv) <= 3 else sys.argv[3]
+	should_equalize_hist = True if len(sys.argv) <= 3 else boolean_from_char(sys.argv[3])
 	if should_equalize_hist:
 		print("#-- Running Histogram Equalization --#\n")
 		img = impr_tools.histogram_equalization(img)
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 		print("!-- Skipping Histogram Equalization --!\n")
 
 	# Adjust Saturation
-	should_adjust_saturation = True if len(sys.argv) <= 4 else sys.argv[4]
+	should_adjust_saturation = True if len(sys.argv) <= 4 else boolean_from_char(sys.argv[4])
 	if should_adjust_saturation:
 		print("#-- Running Adjust Saturation --#\n")
 		img = impr_tools.adjust_saturation(img, saturation_factor=1.15)
@@ -65,4 +65,4 @@ if __name__ == '__main__':
 
 	# Done
 	scipy.misc.imsave('./final_image.png', img)
-	print('︵ \(°□°)/ ︵ ----> Done!\n')
+	print('----> Done! <----\n')
