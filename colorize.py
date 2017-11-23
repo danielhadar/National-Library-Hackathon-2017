@@ -9,14 +9,21 @@ import skimage.io
 
 import scipy.misc
 
-if __name__ == '__main__':
-    input_image = scipy.misc.imread(sys.argv[1], mode='RGB') / 255.
-    small_size = (input_image.shape[0] // 4) , (input_image.shape[1] // 4)
-    input_image_downsampled = skimage.transform.resize(input_image, small_size, preserve_range=True, mode='reflect')
+MIN_AXIS_SIZE = 360
 
-    small_fn = sys.argv[1].replace(sys.argv[1][-4:], '.small' + sys.argv[1][-4:])
-    small_colored_fn = sys.argv[1].replace(sys.argv[1][-4:], '.small.color' + sys.argv[1][-4:])
-    out_fn = sys.argv[1].replace(sys.argv[1][-4:], '.color' + sys.argv[1][-4:])
+def colorize_image(fn):
+    input_image = scipy.misc.imread(fn, mode='RGB') / 255.
+
+    small_size = np.array(input_image.shape[:2]) * (MIN_AXIS_SIZE / min(input_image.shape[:2]))
+    small_size = np.round(small_size).astype(int)
+    input_image_downsampled = skimage.transform.resize(input_image, small_size, preserve_range=True,
+                                                       mode='reflect')
+
+    ext = os.path.splitext(fn)[1]
+
+    small_fn = fn.replace(ext, '.small' + ext)
+    small_colored_fn = fn.replace(ext, '.small.color' + ext)
+    out_fn = fn.replace(fn, '.color' + ext)
 
     scipy.misc.imsave(small_fn, input_image_downsampled)
     os.system('th colorize.lua %s %s' % (small_fn, small_colored_fn))
@@ -25,11 +32,19 @@ if __name__ == '__main__':
     small_chroma = skimage.color.rgb2yuv(small_colored)
 
     upscaled_chroma = skimage.transform.resize(small_chroma,
-        (input_image.shape[0], input_image.shape[1], 3), preserve_range=True, mode='reflect')[:,:,1:]
+                                               input_image.shape, preserve_range=True,
+                                               mode='reflect')[:, :, 1:]
     orig_lum = input_image
 
-    print(orig_lum.shape, upscaled_chroma.shape)
-    combined_lab = np.concatenate([orig_lum[:,:,0:1], upscaled_chroma], axis=-1)
+    combined_lab = np.concatenate([orig_lum[:, :, 0:1], upscaled_chroma], axis=-1)
     out_image = skimage.color.yuv2rgb(combined_lab).clip(0., 1.)
 
     scipy.misc.imsave(out_fn, out_image)
+    os.unlink(small_fn)
+    os.unlink(small_colored_fn)
+
+
+if __name__ == '__main__':
+    for fn in sys.argv[1:]:
+        colorize_image(fn)
+        print('Colorized {}'.format(fn))
