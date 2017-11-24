@@ -51,16 +51,28 @@ function doSearch(query) {
                         type: "GET",
                         url: recordUrl,
                         success: function (response) {
+                            var subject = _.find(response.metadata, {label: "Subject"}) || "";
+                            if(subject && subject.value){
+                                subject = subject.value;
+                            }
+                            var creationDate = _.find(response.metadata, {label: "Creation Date"}) || "";
+                            if(creationDate && creationDate.value){
+                                creationDate = creationDate.value;
+                            }
                             let imageUrl = response.sequences[0].canvases[0].images[0].resource.service["@id"];
                             var fullImageURL = imageUrl + '/full/576,/0/default.jpg';
-                            renderedResults = Mustache.render(imageTemplate, {picture: fullImageURL});
+                            renderedResults = Mustache.render(imageTemplate, {
+                                picture: fullImageURL,
+                                subject: subject,
+                                creationDate: creationDate
+                            });
 
                             $("#images").append(renderedResults);
                         }
                     });
                 });
 
-                $("#images").on("click", ".pic" ,function(e){
+                $("#images").on("click", ".pic", function (e) {
                     var urlToFetch = e.target.src;
                     var backednURL = "http://34.239.198.2:5000/photo";
                     console.log(urlToFetch);
@@ -74,24 +86,16 @@ function doSearch(query) {
                         jsonp: "callback",
                         dataType: 'jsonp',
                         success: function (response) {
-                            console.log(response);
                             let preview = $(".preview").html('');
                             // let parent = $(e.target).parent();
                             var urlAfter = response.processed_image;
-                            //"http://iiif.nli.org.il/IIIFv21/FL45931741/full/576,/0/default.jpg";
-                            preview.append("<img src='"+urlToFetch+"'>");
-                            preview.append("<img src='"+urlAfter+"'>");
-                            // $.featherlight(preview,{});
-                            // $.fancybox.defaults.modal = true;
-                            // $.fancybox.open(preview);
+                            preview.append("<img src='" + urlToFetch + "'>");
+                            preview.append("<img src='" + urlAfter + "'>");
                             lity(preview);
-                            $(document).on('lity:close', function(event, instance) {
-                                var previewParent = $('.preview').parent()
+                            $(document).on('lity:close', function (event, instance) {
                                 $('.preview').remove();
-
                                 $(".search").append("<div class='preview'></div>");
                             });
-
 
                             preview.twentytwenty();
                             $("#loader").removeClass("loading");
